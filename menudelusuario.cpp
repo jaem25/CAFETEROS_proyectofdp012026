@@ -1,20 +1,56 @@
-#include <iostream> 
+#include <iostream>
 using namespace std;
-int main () {
-    int opcion;
-    do {
-        cout<<"\n======MENU USUARIO======"<<endl;
-        cout<< "1. Ver menu"<<endl;
-        cout<<"2. Hacer pedido"<<endl;
-        cout<<"3. Ver pedido"<<endl;
-        cout<<"4. Calcular total"<<endl;
-        cout<<"5. Modificar pedido"<<endl;
-        cout<<"6. Salir"<<endl;
-        cin>>opcion; 
-        if(opcion <1 || opcion >6) {
-            cout<<"Opcion invalida"<<endl;
+int main()
+{
+    int opcion, categoria, respuesta;
+
+    do
+    {
+        cout << "\n======MENU USUARIO======" << endl;
+        cout << "1. Ver menu" << endl;
+        cout << "2. Hacer pedido" << endl;
+        cout << "3. Ver pedido" << endl;
+        cout << "4. Calcular total" << endl;
+        cout << "5. Modificar pedido" << endl;
+        cout << "6. Salir" << endl;
+        cin >> opcion;
+        if (opcion < 1 || opcion > 6)
+        {
+            cout << "Opcion invalida" << endl;
         }
-    }
-        while(opcion !=6);
-    
-    return 0; }
+        else
+        {
+            switch (opcion) {
+            case 1:
+            {
+                cout << "\n======CATEGORIAS======" << endl;
+                cout << "1. Desayunos" << endl;
+                cout << "2. Almuerzos" << endl;
+                cout << "3. Cenas" << endl;
+                cout << "4. Snacks" << endl;
+                cout << "5. Bebidas" << endl;
+                cin >> categoria;
+                if(categoria<1 || categoria>5){
+                    cout<<"Categoria invalida"<<endl;
+                } else { 
+                    switch(categoria) {
+                        case 1:
+                        cout<<"\n======DESAYUNOS======"<<endl;
+                        cout<<"1. Desayuno tipico----$3.50"<<endl;
+                        cout<<"2. Pan con huevo----$1.50"<<endl;
+                        cout<<"3. Pan con frijoles y queso----$2.00"<<endl;
+                        cout<<"4. Pancakes----$2.50"<<endl;
+                        cout<<"Sandwich de jamon----$2.50"<<endl;
+                        break;
+                        
+                    }
+                }
+
+                break;
+            }
+        }
+
+    } while (opcion != 6);
+
+    return 0;
+}
