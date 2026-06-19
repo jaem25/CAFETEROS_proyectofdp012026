@@ -56,6 +56,18 @@ int main()
                 }
                 break;
             }
+            case 2:
+                // HACER PEDIDO
+                break;
+            case 3:
+                // VER PEDIDO
+                break;
+            case 4:
+                // CALCULAR TOTAL
+                break;
+            case 5:
+                // MODIFICAR PEDIDO
+                break;
             case 6:
                 cout << "Saliendo..." << endl;
                 break;
