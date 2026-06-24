@@ -15,7 +15,7 @@ void menuPrincipal() {
         cout << "1) soy admin\n";
         cout << "2) soy cliente\n";
         cout << "3) salir\n";
-        cout << "Ingrese una opcion: ";
+        cout << "opcion: ";
         cin >> opcion;
         cin.ignore();
 
@@ -27,7 +27,7 @@ void menuPrincipal() {
                 menuCli();
                 break;
             case 3:
-                cout << "hasta luego :D\n";
+                cout << "hasta luego\n";
                 break;
             default:
                 cout << "esa opcion no existe\n";
