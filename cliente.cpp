@@ -21,6 +21,8 @@ void menuCli() {
         return;
     }
 
+    cargarContador();
+
     int opcion = 0;
 
     while (opcion != 5) {
@@ -179,15 +181,9 @@ void cobrar() {
         return;
     }
 
-    int numeroFactura = 0;
-    ifstream archivoNumero("num_factura.txt");
-    if (archivoNumero.is_open()) {
-        archivoNumero >> numeroFactura;
-        archivoNumero.close();
-    }
-    numeroFactura = numeroFactura + 1;
+    string nombreArchivo = "factura" + to_string(contadorFacturas) + ".txt";
 
-    ofstream factura(ARCHFAC, ios::app);
+    ofstream factura(nombreArchivo);
     if (!factura.is_open()) {
         cout << "error al generar factura\n";
         return;
@@ -198,8 +194,8 @@ void cobrar() {
     float totalFinal = 0;
     int i = 0;
 
-    factura << "\n================================\n";
-    factura << "  FACTURA No. " << numeroFactura << "\n";
+    factura << "================================\n";
+    factura << "  FACTURA No. " << contadorFacturas << "\n";
     factura << "  CAFETEROS.UCA\n";
     factura << "================================\n";
 
@@ -222,17 +218,16 @@ void cobrar() {
     factura << "================================\n";
     factura.close();
 
-    ofstream archivoGuardar("num_factura.txt");
-    archivoGuardar << numeroFactura;
-    archivoGuardar.close();
+    contadorFacturas = contadorFacturas + 1;
+    guardarContador();
 
     guardarMenu();
 
-    cout << "\nfactura generada (factura.txt)\n";
+    cout << "\nfactura generada (" << nombreArchivo << ")\n";
     cout << "total a pagar: $" << fixed << setprecision(2) << totalFinal << "\n";
 
     totalCarrito = 0;
-    ofstream limpiar(ARCHPED, ios::trunc);
+    ofstream limpiar(ARCHPED);
     limpiar.close();
 }
 
@@ -264,7 +259,7 @@ void cancelarOrden() {
     guardarMenu();
 
     totalCarrito = 0;
-    ofstream limpiar(ARCHPED, ios::trunc);
+    ofstream limpiar(ARCHPED);
     limpiar.close();
 
     cout << "pedido cancelado stock devuelto\n";

@@ -9,7 +9,7 @@ using namespace std;
 
 const string ARCHP = "productos.txt";
 const string ARCHPED = "pedido.txt";
-const string ARCHFAC = "factura.txt";
+const string ARCHCONT = "contador.txt";
 const string CONTRA = "cafeteros123";
 
 struct Producto {
@@ -28,11 +28,14 @@ extern Producto menu[MAXP];
 extern Orden carrito[MAXPED];
 extern int totalMenu;
 extern int totalCarrito;
+extern int contadorFacturas;
 
 bool cargarMenu();
 void guardarMenu();
 bool abrirCarrito();
 void guardarCarrito();
+void cargarContador();
+void guardarContador();
 
 void menuPrincipal();
 void validarAdmin();
