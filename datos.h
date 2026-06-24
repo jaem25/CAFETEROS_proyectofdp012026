@@ -4,53 +4,51 @@
 #include <string>
 using namespace std;
 
-// constantes
-const int MAX_PRODUCTOS = 100;
-const int MAX_PEDIDO    = 50;
-const string ARCHIVO_PRODUCTOS = "productos.txt";
-const string ARCHIVO_PEDIDO    = "pedido.txt";
-const string ARCHIVO_FACTURA   = "factura.txt";
-const string PASSWORD_CREADOR  = "admin123";
+#define MAXP 100
+#define MAXPED 50
 
-// estructuras para el sistema
+const string ARCHP = "productos.txt";
+const string ARCHPED = "pedido.txt";
+const string ARCHFAC = "factura.txt";
+const string CONTRA = "cafeteros123";
+
 struct Producto {
     string nombre;
-    float  precio;
-    int    cantidadActual;
+    float precio;
+    int cantidad;
 };
 
-struct ItemPedido {
-    string nombreProducto;
-    float  precioProducto;
-    int    cantidadPedido;
+struct Orden {
+    string nombre;
+    float precio;
+    int cantidadPedida;
 };
 
-// ARREGLOS
-extern Producto   listaProductos[MAX_PRODUCTOS];
-extern ItemPedido listaPedido[MAX_PEDIDO];
-extern int        nProductos;
-extern int        nPedido;
+extern Producto menu[MAXP];
+extern Orden carrito[MAXPED];
+extern int totalMenu;
+extern int totalCarrito;
 
-// utilidades
-bool cargarProductosDesdeArchivo();
-void guardarProductosEnArchivo();
-bool abrirArchivoPedidoCorrectamente();
-void escribirPedidoEnArchivo();
+bool cargarMenu();
+void guardarMenu();
+bool abrirCarrito();
+void guardarCarrito();
 
-// menuCreador
-void menuCreador();
-void verProductos();
+void menuPrincipal();
+void validarAdmin();
+
+void menuAdmin();
+void verMenu();
 void agregarProducto();
-void eliminarProducto();
-void editarMenu();
-void estimarProductos();
+void quitarProducto();
+void editarProducto();
+void verCaja();
 
-// menuCliente
-void menuCliente();
+void menuCli();
 void verCarta();
-void agregarPedido();
+void hacerOrden();
 void verCarrito();
-void facturarYTodo();
-void cancelarTodo();
+void cobrar();
+void cancelarOrden();
 
 #endif

@@ -5,185 +5,249 @@
 #include "datos.h"
 using namespace std;
 
-// Menu principal del creador
-void menuCreador() {
-    int opcionCreador = -1;
+void menuPrincipal() {
+    int opcion = 0;
 
-    while (opcionCreador != 0) {
-        cout << "\n--- MENU CREADOR ---\n";
-        cout << "1) Ver productos\n";
-        cout << "2) Agregar productos\n";
-        cout << "3) Eliminar producto\n";
-        cout << "4) Editar menu\n";
-        cout << "5) Estimar productos\n";
-        cout << "0) Salir de menu creador\n";
-        cout << "Opcion: ";
-        cin  >> opcionCreador;
+    while (opcion != 3) {
+        cout << "\n================================\n";
+        cout << "   SISTEMA DE CAFETERIA\n";
+        cout << "================================\n";
+        cout << "1) soy admin\n";
+        cout << "2) soy cliente\n";
+        cout << "3) salir\n";
+        cout << "opcion: ";
+        cin >> opcion;
         cin.ignore();
 
-        switch (opcionCreador) {
-            case 1: verProductos();     break;
-            case 2: agregarProducto();  break;
-            case 3: eliminarProducto(); break;
-            case 4: editarMenu();       break;
-            case 5: estimarProductos(); break;
-            case 0: break;
-            default: cout << "ERROR: opcion invalida.\n";
+        switch (opcion) {
+            case 1:
+                validarAdmin();
+                break;
+            case 2:
+                menuCli();
+                break;
+            case 3:
+                cout << "hasta luego\n";
+                break;
+            default:
+                cout << "esa opcion no existe\n";
         }
     }
 }
-// Ver todos los productos
-void verProductos() {
-    if (!cargarProductosDesdeArchivo()) {
-        cout << "ERROR: no se pudo abrir productos.txt\n";
-        return;
-    }
-    if (nProductos == 0) {
-        cout << "No hay datos en el archivo.\n";
-        return;
-    }
 
-    cout << "\n--- LISTA DE PRODUCTOS ---\n";
-    cout << left << setw(5)  << "No."
-                << setw(25) << "Nombre"
-                << setw(12) << "Precio"
-                << "Stock\n";
-    cout << string(50, '-') << "\n";
+void validarAdmin() {
+    cout << "ingrese la clave: ";
+    string clave;
+    getline(cin, clave);
 
-    for (int i = 0; i < nProductos; i++) {
-        cout << left << setw(5)  << (i + 1)
-                    << setw(25) << listaProductos[i].nombre
-                    << "$" << setw(11) << fixed << setprecision(2)
-                    << listaProductos[i].precio
-                    << listaProductos[i].cantidadActual << "\n";
+    if (clave == CONTRA) {
+        menuAdmin();
+    } else {
+        cout << "clave incorrecta\n";
     }
 }
-// Agregar un producto nuevo
-void agregarProducto() {
-    cargarProductosDesdeArchivo();
 
-    if (nProductos >= MAX_PRODUCTOS) {
-        cout << "Error: Memoria llena.\n";
+void menuAdmin() {
+    int opcion = 0;
+
+    while (opcion != 6) {
+        cout << "\n====== MENU ADMIN ======\n";
+        cout << "1) ver menu\n";
+        cout << "2) agregar producto\n";
+        cout << "3) quitar producto\n";
+        cout << "4) editar producto\n";
+        cout << "5) ver caja\n";
+        cout << "6) salir\n";
+        cout << "opcion: ";
+        cin >> opcion;
+        cin.ignore();
+
+        switch (opcion) {
+            case 1:
+                verMenu();
+                break;
+            case 2:
+                agregarProducto();
+                break;
+            case 3:
+                quitarProducto();
+                break;
+            case 4:
+                editarProducto();
+                break;
+            case 5:
+                verCaja();
+                break;
+            case 6:
+                break;
+            default:
+                cout << "esa opcion no existe\n";
+        }
+    }
+}
+
+void verMenu() {
+    if (!cargarMenu()) {
+        cout << "error al abrir el archivo\n";
+        return;
+    }
+    if (totalMenu == 0) {
+        cout << "no hay productos todavia\n";
+        return;
+    }
+
+    cout << "\n-- lista del menu --\n";
+    int i = 0;
+    for (i = 0; i < totalMenu; i++) {
+        cout << i + 1 << ") " << menu[i].nombre << "  precio: $" << fixed << setprecision(2) << menu[i].precio << "  stock: " << menu[i].cantidad << "\n";
+    }
+}
+
+void agregarProducto() {
+    cargarMenu();
+
+    if (totalMenu >= MAXP) {
+        cout << "ya no caben mas productos\n";
         return;
     }
 
     string nombre;
-    float  precio;
-    int    cantidad;
-    cout << "Nombre del producto: ";
+    float precio;
+    int cantidad;
+
+    cout << "nombre del producto: ";
     getline(cin, nombre);
-    cout << "Precio: ";
-    cin  >> precio;
-    cout << "Cantidad inicial: ";
-    cin  >> cantidad;
+    cout << "precio: ";
+    cin >> precio;
+    cout << "cantidad: ";
+    cin >> cantidad;
     cin.ignore();
-    for (int i = 0; i < nProductos; i++) {
-        if (listaProductos[i].nombre == nombre) {
-            cout << "El producto ya existe. Actualizando stock.\n";
-            listaProductos[i].cantidadActual += cantidad;
-            guardarProductosEnArchivo();
-            return;
+
+    int i = 0;
+    bool yaExiste = false;
+    for (i = 0; i < totalMenu; i++) {
+        if (menu[i].nombre == nombre) {
+            cout << "ese producto ya existe, se le suma el stock\n";
+            menu[i].cantidad = menu[i].cantidad + cantidad;
+            yaExiste = true;
         }
     }
-    listaProductos[nProductos].nombre         = nombre;
-    listaProductos[nProductos].precio         = precio;
-    listaProductos[nProductos].cantidadActual = cantidad;
-    nProductos++;
-    guardarProductosEnArchivo();
-    cout << "Producto agregado correctamente.\n";
+
+    if (yaExiste == false) {
+        menu[totalMenu].nombre = nombre;
+        menu[totalMenu].precio = precio;
+        menu[totalMenu].cantidad = cantidad;
+        totalMenu = totalMenu + 1;
+        cout << "producto agregado\n";
+    }
+
+    guardarMenu();
 }
 
-// Eliminar un producto por numero
-void eliminarProducto() {
-    if (!cargarProductosDesdeArchivo() || nProductos == 0) {
-        cout << "No hay productos para eliminar.\n";
+void quitarProducto() {
+    if (!cargarMenu()) {
+        cout << "error al abrir archivo\n";
+        return;
+    }
+    if (totalMenu == 0) {
+        cout << "no hay productos para quitar\n";
         return;
     }
 
-    verProductos();
-    cout << "Numero de producto a eliminar (0 para cancelar): ";
-    int idx;
-    cin >> idx;
+    verMenu();
+    cout << "cual producto quiere quitar (0 para cancelar): ";
+    int numero;
+    cin >> numero;
     cin.ignore();
 
-    if (idx == 0) return;
-    if (idx < 1 || idx > nProductos) {
-        cout << "Numero invalido.\n";
+    if (numero == 0) {
         return;
     }
 
-    string nombreEliminar = listaProductos[idx - 1].nombre;
-    for (int i = idx - 1; i < nProductos - 1; i++) {
-        listaProductos[i] = listaProductos[i + 1];
+    if (numero < 1 || numero > totalMenu) {
+        cout << "numero invalido\n";
+        return;
     }
-    nProductos--;
 
-    guardarProductosEnArchivo();
-    cout << "Producto \"" << nombreEliminar << "\" eliminado.\n";
+    string nombreQuitado = menu[numero - 1].nombre;
+
+    int i = 0;
+    for (i = numero - 1; i < totalMenu - 1; i++) {
+        menu[i] = menu[i + 1];
+    }
+    totalMenu = totalMenu - 1;
+
+    guardarMenu();
+    cout << "se quito: " << nombreQuitado << "\n";
 }
 
-// Editar nombre o precio de un producto
-void editarMenu() {
-    if (!cargarProductosDesdeArchivo() || nProductos == 0) {
-        cout << "No hay productos para editar.\n";
+void editarProducto() {
+    if (!cargarMenu()) {
+        cout << "error al abrir archivo\n";
+        return;
+    }
+    if (totalMenu == 0) {
+        cout << "no hay productos\n";
         return;
     }
 
-    verProductos();
-    cout << "Numero de producto a editar (0 para cancelar): ";
-    int idx;
-    cin >> idx;
+    verMenu();
+    cout << "cual producto quiere editar (0 para cancelar): ";
+    int numero;
+    cin >> numero;
     cin.ignore();
 
-    if (idx == 0) return;
-    if (idx < 1 || idx > nProductos) {
-        cout << "Numero invalido.\n";
+    if (numero == 0) {
         return;
     }
 
-    cout << "Nuevo nombre (enter para mantener \""
-        << listaProductos[idx-1].nombre << "\"): ";
+    if (numero < 1 || numero > totalMenu) {
+        cout << "numero invalido\n";
+        return;
+    }
+
+    cout << "nuevo nombre (enter para dejar igual): ";
     string nuevoNombre;
     getline(cin, nuevoNombre);
-    if (!nuevoNombre.empty())
-        listaProductos[idx-1].nombre = nuevoNombre;
+    if (nuevoNombre != "") {
+        menu[numero - 1].nombre = nuevoNombre;
+    }
 
-    cout << "Nuevo precio (0 para mantener "
-        << listaProductos[idx-1].precio << "): ";
+    cout << "nuevo precio (0 para dejar igual): ";
     float nuevoPrecio;
-    cin  >> nuevoPrecio;
+    cin >> nuevoPrecio;
     cin.ignore();
-    if (nuevoPrecio > 0)
-        listaProductos[idx-1].precio = nuevoPrecio;
-    guardarProductosEnArchivo();
-    cout << "Producto actualizado.\n";
+    if (nuevoPrecio > 0) {
+        menu[numero - 1].precio = nuevoPrecio;
+    }
+
+    guardarMenu();
+    cout << "producto actualizado\n";
 }
 
-// Estimar valor total del inventario
-void estimarProductos() {
-    if (!cargarProductosDesdeArchivo() || nProductos == 0) {
-        cout << "No hay productos.\n";
+void verCaja() {
+    if (!cargarMenu()) {
+        cout << "error al abrir archivo\n";
+        return;
+    }
+    if (totalMenu == 0) {
+        cout << "no hay productos\n";
         return;
     }
 
-    cout << "\n--- ESTIMACION DE INVENTARIO ---\n";
-    float totalValor = 0.0f;
-    int   totalItems = 0;
+    cout << "\n-- estimacion de inventario --\n";
+    float totalValor = 0;
+    int totalItems = 0;
+    int i = 0;
 
-    for (int i = 0; i < nProductos; i++) {
-        float valorProducto = listaProductos[i].precio
-                            * listaProductos[i].cantidadActual;
-        totalValor += valorProducto;
-        totalItems += listaProductos[i].cantidadActual;
-
-        cout << listaProductos[i].nombre
-            << " | Stock: "      << listaProductos[i].cantidadActual
-            << " | Valor: $"     << fixed << setprecision(2)
-            << valorProducto     << "\n";
+    for (i = 0; i < totalMenu; i++) {
+        float valorProducto = menu[i].precio * menu[i].cantidad;
+        totalValor = totalValor + valorProducto;
+        totalItems = totalItems + menu[i].cantidad;
+        cout << menu[i].nombre << " | stock: " << menu[i].cantidad << " | valor: $" << fixed << setprecision(2) << valorProducto << "\n";
     }
 
-    cout << "----\n"
-        << "Total items: "   << totalItems
-        << " | Valor total inventario: $"
-        << fixed << setprecision(2) << totalValor << "\n";
+    cout << "---\n";
+    cout << "total de items: " << totalItems << "\n";
+    cout << "valor total del inventario: $" << fixed << setprecision(2) << totalValor << "\n";
 }
