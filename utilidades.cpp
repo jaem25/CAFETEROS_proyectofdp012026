@@ -4,11 +4,11 @@
 #include "datos.h"
 using namespace std;
 
+// [VISTO EN CLASE] 
 Producto menu[MAXP];
 Orden carrito[MAXPED];
 int totalMenu = 0;
 int totalCarrito = 0;
-
 bool cargarMenu() {
     totalMenu = 0;
     ifstream archivo(ARCHP);
@@ -17,18 +17,19 @@ bool cargarMenu() {
     }
 
     string linea;
+    // [VISTO EN CLASE]
     while (getline(archivo, linea)) {
+        // [OPTIMIZACIÓN IA] - Control de desbordamiento para que el arreglo estático no se pase del límite
         if (totalMenu >= MAXP) {
             break;
         }
-
         int pos1 = linea.find('|');
         int pos2 = linea.rfind('|');
 
         if (pos1 == -1 || pos1 == pos2) {
             continue;
         }
-
+        // [VISTO EN CLASE]
         menu[totalMenu].nombre = linea.substr(0, pos1);
         menu[totalMenu].precio = stof(linea.substr(pos1 + 1, pos2 - pos1 - 1));
         menu[totalMenu].cantidad = stoi(linea.substr(pos2 + 1));
@@ -38,6 +39,7 @@ bool cargarMenu() {
     return true;
 }
 
+// [VISTO EN CLASE]
 void guardarMenu() {
     ofstream archivo(ARCHP, ios::trunc);
     int i = 0;

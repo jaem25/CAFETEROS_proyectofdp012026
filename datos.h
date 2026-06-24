@@ -4,14 +4,16 @@
 #include <string>
 using namespace std;
 
+// [VISTO EN CLASE]
 #define MAXP 100
 #define MAXPED 50
 
+// [VISTO EN CLASE]
 const string ARCHP = "productos.txt";
 const string ARCHPED = "pedido.txt";
-const string ARCHFAC = "factura.txt";
 const string CONTRA = "cafeteros123";
 
+// [VISTO EN CLASE]
 struct Producto {
     string nombre;
     float precio;
@@ -24,11 +26,12 @@ struct Orden {
     int cantidadPedida;
 };
 
+// [VISTO EN CLASE]
 extern Producto menu[MAXP];
 extern Orden carrito[MAXPED];
 extern int totalMenu;
 extern int totalCarrito;
-
+//Funciones del sistema
 bool cargarMenu();
 void guardarMenu();
 bool abrirCarrito();

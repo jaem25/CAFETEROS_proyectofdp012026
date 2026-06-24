@@ -1,3 +1,0 @@
-Coca Cola|1.75|40
-Sandwich de pollo|2.60|25
-Hamburguesa|4.50|11

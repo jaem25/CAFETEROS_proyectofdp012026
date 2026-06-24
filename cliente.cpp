@@ -27,7 +27,7 @@ void menuCli() {
         cout << "\n";
         cout << "================================\n";
         cout << "||                            ||\n";
-        cout << "||      CAFETEROS.UCA         ||\n";
+        cout << "||       CAFETEROS.UCA        ||\n";
         cout << "||                            ||\n";
         cout << "================================\n";
         cout << "1) ver carta\n";
@@ -79,6 +79,7 @@ void verCarta() {
     }
 }
 
+// [VISTO EN CLASE]
 void hacerOrden() {
     if (totalMenu == 0) {
         cout << "no hay productos\n";
@@ -125,7 +126,7 @@ void hacerOrden() {
     cin.ignore();
 
     if (respuesta != 's' && respuesta != 'S') {
-        cout << "ok cancelado\n";
+        cout << "Okey, cancelado\n";
         return;
     }
 
@@ -172,13 +173,13 @@ void verCarrito() {
     }
     cout << "total: $" << fixed << setprecision(2) << totalCompra << "\n";
 }
-
 void cobrar() {
     if (totalCarrito == 0) {
         cout << "no hay nada en el carrito\n";
         return;
     }
 
+    // // [VISTO EN CLASE]
     int numeroFactura = 0;
     ifstream archivoNumero("num_factura.txt");
     if (archivoNumero.is_open()) {
@@ -187,7 +188,11 @@ void cobrar() {
     }
     numeroFactura = numeroFactura + 1;
 
-    ofstream factura(ARCHFAC, ios::app);
+    // // [OPTIMIZACIÓN IA] - Concatenación de strings dinámica usando to_string para generar archivos únicos
+    string nombreFactura = "factura" + to_string(numeroFactura) + ".txt";
+
+    // // [OPTIMIZACIÓN IA] - Apertura en modo ios::out para garantizar un archivo de factura limpio e independiente
+    ofstream factura(nombreFactura, ios::out);
     if (!factura.is_open()) {
         cout << "error al generar factura\n";
         return;
@@ -198,9 +203,10 @@ void cobrar() {
     float totalFinal = 0;
     int i = 0;
 
+    // // [VISTO EN CLASE]
     factura << "\n================================\n";
-    factura << "  FACTURA No. " << numeroFactura << "\n";
-    factura << "  CAFETEROS.UCA\n";
+    factura << "||        FACTURA No. " << numeroFactura << "  ||\n";
+    factura << "||        CAFETEROS.UCA       ||\n";
     factura << "================================\n";
 
     for (i = 0; i < totalCarrito; i++) {
@@ -209,6 +215,7 @@ void cobrar() {
         factura << carrito[i].nombre << " x" << carrito[i].cantidadPedida << "  $" << fixed << setprecision(2) << carrito[i].precio << "  = $" << subtotal << "\n";
     }
 
+    // // [VISTO EN CLASE] 
     if (totalNeto > 10.0) {
         descuento = totalNeto * 0.10;
         factura << "descuento 10%: -$" << fixed << setprecision(2) << descuento << "\n";
@@ -219,23 +226,23 @@ void cobrar() {
     factura << "--------------------------------\n";
     factura << "total neto:    $" << fixed << setprecision(2) << totalNeto << "\n";
     factura << "total a pagar: $" << fixed << setprecision(2) << totalFinal << "\n";
-    factura << "================================\n";
+    factura << "--------------------------------\n";
     factura.close();
-
     ofstream archivoGuardar("num_factura.txt");
     archivoGuardar << numeroFactura;
     archivoGuardar.close();
-
     guardarMenu();
 
-    cout << "\nfactura generada (factura.txt)\n";
+    cout << "\nfactura generada (" << nombreFactura << ")\n";
     cout << "total a pagar: $" << fixed << setprecision(2) << totalFinal << "\n";
 
+    // [VISTO EN CLASE]
     totalCarrito = 0;
     ofstream limpiar(ARCHPED, ios::trunc);
     limpiar.close();
 }
 
+// [VISTO EN CLASE]
 void cancelarOrden() {
     if (totalCarrito == 0) {
         cout << "el carrito ya esta vacio\n";
@@ -262,7 +269,6 @@ void cancelarOrden() {
     }
 
     guardarMenu();
-
     totalCarrito = 0;
     ofstream limpiar(ARCHPED, ios::trunc);
     limpiar.close();
