@@ -1,0 +1,5 @@
+Sandwich de pollo|2.50|25
+Sandwich de jamon|2.25|19
+Jugos naturales|1.25|19
+Flan|2.75|30
+Porcion pizza|2.10|31

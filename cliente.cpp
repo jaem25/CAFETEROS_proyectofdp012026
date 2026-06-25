@@ -9,15 +9,15 @@ void menuCli() {
     totalCarrito = 0;
 
     if (!cargarMenu()) {
-        cout << "error no se pudo abrir productos.txt\n";
+        cout << "ERROR no se pudo abrir productos.txt\n";
         return;
     }
     if (totalMenu == 0) {
-        cout << "no hay productos disponibles\n";
+        cout << "No hay productos disponibles\n";
         return;
     }
     if (!abrirCarrito()) {
-        cout << "error con el archivo de pedido\n";
+        cout << "ERROR con el archivo de pedido\n";
         return;
     }
 
@@ -30,12 +30,12 @@ void menuCli() {
         cout << "||       CAFETEROS.UCA        ||\n";
         cout << "||                            ||\n";
         cout << "================================\n";
-        cout << "1) ver carta\n";
-        cout << "2) hacer pedido\n";
-        cout << "3) ver carrito\n";
-        cout << "4) cobrar\n";
-        cout << "5) cancelar y salir\n";
-        cout << "opcion: ";
+        cout << "1) Ver menu\n";
+        cout << "2) Hacer pedido\n";
+        cout << "3) Ver carrito\n";
+        cout << "4) Cobrar y hacer factura\n";
+        cout << "5) Cancelar pedido y salir\n";
+        cout << "Ingrese un opcion: ";
         cin >> opcion;
         cin.ignore();
 
@@ -57,13 +57,13 @@ void menuCli() {
                 cancelarOrden();
                 break;
             default:
-                cout << "esa opcion no existe\n";
+                cout << "Esa opcion no existe\n";
         }
     }
 }
 
 void verCarta() {
-    cout << "\n-- carta --\n";
+    cout << "\n------ carta ------\n";
     bool haySomthing = false;
     int i = 0;
 
@@ -75,20 +75,20 @@ void verCarta() {
     }
 
     if (haySomthing == false) {
-        cout << "no hay nada disponible por ahora\n";
+        cout << "No hay nada disponible por ahora\n";
     }
 }
 
 // [VISTO EN CLASE]
 void hacerOrden() {
     if (totalMenu == 0) {
-        cout << "no hay productos\n";
+        cout << "No hay productos\n";
         return;
     }
 
     verCarta();
 
-    cout << "numero del producto (0 para cancelar): ";
+    cout << "Ingrese numero del producto (presione 0 para cancelar): ";
     int numero;
     cin >> numero;
     cin.ignore();
@@ -98,35 +98,35 @@ void hacerOrden() {
     }
 
     if (numero < 1 || numero > totalMenu) {
-        cout << "ese numero no existe\n";
+        cout << "Ese numero no existe\n";
         return;
     }
     if (menu[numero - 1].cantidad <= 0) {
-        cout << "ese producto no tiene stock\n";
+        cout << "Ese producto no tiene stock, lo sentimos :(\n";
         return;
     }
 
-    cout << "cuantos quiere pedir: ";
+    cout << "Cuantos desea pedir: ";
     int cantidad;
     cin >> cantidad;
     cin.ignore();
 
     if (cantidad <= 0) {
-        cout << "cantidad no valida\n";
+        cout << "Cantidad no valida\n";
         return;
     }
     if (cantidad > menu[numero - 1].cantidad) {
-        cout << "no hay suficiente stock hay: " << menu[numero - 1].cantidad << "\n";
+        cout << "No hay suficiente stock hay: " << menu[numero - 1].cantidad << "\n";
         return;
     }
 
-    cout << "agregar " << cantidad << " x " << menu[numero - 1].nombre << " si o no (s/n): ";
+    cout << "Agregar " << cantidad << " x " << menu[numero - 1].nombre << " si o no (s/n): ";
     char respuesta;
     cin >> respuesta;
     cin.ignore();
 
     if (respuesta != 's' && respuesta != 'S') {
-        cout << "Okey, cancelado\n";
+        cout << "Okey, cancelando...\n";
         return;
     }
 
@@ -141,7 +141,7 @@ void hacerOrden() {
 
     if (yaEsta == false) {
         if (totalCarrito >= MAXPED) {
-            cout << "el carrito esta lleno\n";
+            cout << "El carrito esta lleno\n";
             return;
         }
         carrito[totalCarrito].nombre = menu[numero - 1].nombre;
@@ -153,16 +153,16 @@ void hacerOrden() {
     menu[numero - 1].cantidad = menu[numero - 1].cantidad - cantidad;
 
     guardarCarrito();
-    cout << "agregado al carrito\n";
+    cout << "Agregado al carrito\n";
 }
 
 void verCarrito() {
     if (totalCarrito == 0) {
-        cout << "el carrito esta vacio\n";
+        cout << "El carrito esta vacio\n";
         return;
     }
 
-    cout << "\n-- carrito --\n";
+    cout << "\n------ carrito ------\n";
     float totalCompra = 0;
     int i = 0;
 
@@ -175,7 +175,7 @@ void verCarrito() {
 }
 void cobrar() {
     if (totalCarrito == 0) {
-        cout << "no hay nada en el carrito\n";
+        cout << "No hay nada en el carrito\n";
         return;
     }
 
@@ -205,8 +205,8 @@ void cobrar() {
 
     // // [VISTO EN CLASE]
     factura << "\n================================\n";
-    factura << "||        FACTURA No. " << numeroFactura << "  ||\n";
-    factura << "||        CAFETEROS.UCA       ||\n";
+    factura << "          FACTURA No. " << numeroFactura << "\n";
+    factura << "          CAFETEROS.UCA       \n";
     factura << "================================\n";
 
     for (i = 0; i < totalCarrito; i++) {
@@ -218,14 +218,14 @@ void cobrar() {
     // // [VISTO EN CLASE] 
     if (totalNeto > 10.0) {
         descuento = totalNeto * 0.10;
-        factura << "descuento 10%: -$" << fixed << setprecision(2) << descuento << "\n";
+        factura << "Descuento del 10%: -$" << fixed << setprecision(2) << descuento << "\n";
     }
 
     totalFinal = totalNeto - descuento;
 
     factura << "--------------------------------\n";
-    factura << "total neto:    $" << fixed << setprecision(2) << totalNeto << "\n";
-    factura << "total a pagar: $" << fixed << setprecision(2) << totalFinal << "\n";
+    factura << "Total neto:    $" << fixed << setprecision(2) << totalNeto << "\n";
+    factura << "Total a pagar: $" << fixed << setprecision(2) << totalFinal << "\n";
     factura << "--------------------------------\n";
     factura.close();
     ofstream archivoGuardar("num_factura.txt");
@@ -233,8 +233,8 @@ void cobrar() {
     archivoGuardar.close();
     guardarMenu();
 
-    cout << "\nfactura generada (" << nombreFactura << ")\n";
-    cout << "total a pagar: $" << fixed << setprecision(2) << totalFinal << "\n";
+    cout << "\nFactura generada (" << nombreFactura << ")\n";
+    cout << "Total a pagar: $" << fixed << setprecision(2) << totalFinal << "\n";
 
     // [VISTO EN CLASE]
     totalCarrito = 0;
@@ -245,11 +245,11 @@ void cobrar() {
 // [VISTO EN CLASE]
 void cancelarOrden() {
     if (totalCarrito == 0) {
-        cout << "el carrito ya esta vacio\n";
+        cout << "El carrito ya esta vacio\n";
         return;
     }
 
-    cout << "seguro que quiere cancelar (s/n): ";
+    cout << "Seguro que desea cancelar? (s/n): ";
     char respuesta;
     cin >> respuesta;
     cin.ignore();
@@ -273,5 +273,5 @@ void cancelarOrden() {
     ofstream limpiar(ARCHPED, ios::trunc);
     limpiar.close();
 
-    cout << "pedido cancelado stock devuelto\n";
+    cout << "Pedido cancelado stock devuelto\n";
 }
