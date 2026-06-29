@@ -4,7 +4,7 @@
 #include <string>
 using namespace std;
 
-// [VISTO EN CLASE]
+// [OPTIMIZACION POR IA]
 #define MAXP 100
 #define MAXPED 50
 
@@ -31,6 +31,7 @@ extern Producto menu[MAXP];
 extern Orden carrito[MAXPED];
 extern int totalMenu;
 extern int totalCarrito;
+
 //Funciones del sistema
 bool cargarMenu();
 void guardarMenu();

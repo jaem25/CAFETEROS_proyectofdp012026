@@ -35,7 +35,7 @@ void menuCli() {
         cout << "3) Ver carrito\n";
         cout << "4) Cobrar y hacer factura\n";
         cout << "5) Cancelar pedido y salir\n";
-        cout << "Ingrese un opcion: ";
+        cout << "Ingrese una opcion: ";
         cin >> opcion;
         cin.ignore();
 
